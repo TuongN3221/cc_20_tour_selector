@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import TourCard from "./TourCard";
 
-const Gallery = ({ tours, setTours, onRemove}) => {
+const Gallery = ({ setTours}) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -20,16 +20,15 @@ const Gallery = ({ tours, setTours, onRemove}) => {
         }
         fetchTours();
     }, [setTours])// Dependency array to avoid infinite loop;
-};
 
-if (loading) {
-    return <div className="loading">Loading...</div>;
-}
-if (error) {
-    return <div className="error">Error: {error}</div>;
-}
+    if (loading) {
+        return <div className="loading">Loading...</div>
+    }
+    if (error) {
+        return<div className="error">Error: {error}</div>
+    }
 
-return (
+    return (
     <section className="gallery">
         {tours.map((tour) => (
             <TourCard
@@ -44,6 +43,9 @@ return (
         ))}
     </section>
 )
+};
+
+
 
 
 export default Gallery;
