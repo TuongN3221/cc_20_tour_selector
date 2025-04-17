@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import DestinationSelector from "./components/DestinationSelector";
-
 
 const App = () => {
     const [tours, setTours] = useState([]);
@@ -8,72 +7,63 @@ const App = () => {
     const [error, setError] = useState(null);
     const [filter, setFilter] = useState("");
 
-    useEffect(() => {
-        const fetchTours = async () => {
-            try {
-                const response = await fetch("https://api.allorigins.win/raw?url=https://course-api.com/react-tours-project");
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                const data = await response.json();
-                setTours(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
+    const fetchTours = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch("https://api.allorigins.win/raw?url=https://course-api.com/react-tours-project");
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
             }
-        };
+            const data = await response.json();
+            setTours(data);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchTours();
     }, []);
+
+    const handleRemoveTour = (id) => {
+        setTours((prevTours) => prevTours.filter((tour) => tour.id !== id));
+    };
+
+    const handleRefresh = () => {
+        fetchTours();
+    };
+
+    if (loading) {
+        return <div className="loading">Loading...</div>;
+    }
+
+    if (error) {
+        return <div className="error">Error: {error}</div>;
+    }
+
     return (
         <div>
             <h1>Tours</h1>
-            <DestinationSelector
-                tours={tours}
-                onSelectDestination={(destination) => {
-                    setFilter(destination);
-                }}
-            />
-            {/* Pass the tours, loading, error, filter, and setFilter to the child component */}
-            <ChildComponent
-                tours={tours}
-                loading={loading}
-                error={error}
-                filter={filter}
-                setFilter={setFilter}
-            />
-        </div>
-    )
-}
-
-// Child component to display tours
-// This component will receive the tours, loading, error, and filter props
-const ChildComponent = ({tours, loading, error, filter, setFilter}) => {
-    if (loading) {
-        return <p>Loading...</p>
-    }
-    if (error) {
-        return <p>Error: {error}</p>
-    }
-    const filteredTours = tours.filter((tours) => {
-        tours.name.toLowerCase().includes(filter.toLowerCase)
-    });
-    return (
-        <div>
-            {/* Filter input */}
-            <input
-                type="text"
-                placeholder="Filter tours"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-            />
-            <ul>
-                {filteredTours.map((tour) => (
-                    <li key={tour.id}>{tour.name}</li>
-                ))}
-            </ul>
+            {tours.length === 0 ? (
+                <div className="no-tours">
+                    <p>No tours left. Refresh to reload.</p>
+                    <button onClick={handleRefresh} className="refresh-btn">
+                        Refresh
+                    </button>
+                </div>
+            ) : (
+                <DestinationSelector
+                    tours={tours}
+                    onSelectDestination={(destination) => {
+                        setFilter(destination);
+                    }}
+                    onRemove={handleRemoveTour}
+                />
+            )}
         </div>
     );
-}
+};
 
 export default App;
