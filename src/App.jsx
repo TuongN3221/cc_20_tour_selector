@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from "react";
+import DestinationSelector from "./components/DestinationSelector";
+
 
 const App = () => {
     const [tours, setTours] = useState([]);
@@ -9,7 +11,7 @@ const App = () => {
     useEffect(() => {
         const fetchTours = async () => {
             try {
-                const response = await fetch("https://course-api.com/react-tours-project");
+                const response = await fetch("https://api.allorigins.win/raw?url=https://course-api.com/react-tours-project");
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
@@ -26,6 +28,12 @@ const App = () => {
     return (
         <div>
             <h1>Tours</h1>
+            <DestinationSelector
+                tours={tours}
+                onSelectDestination={(destination) => {
+                    setFilter(destination);
+                }}
+            />
             {/* Pass the tours, loading, error, filter, and setFilter to the child component */}
             <ChildComponent
                 tours={tours}

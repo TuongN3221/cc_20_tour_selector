@@ -1,7 +1,7 @@
-import React, { usestate } from "react";
+import React, { useState } from "react";
 
 const DestinationSelector = ({tours, onSelectDestination}) =>{
-    const [selectedDestination, setSelectedDestination] = usestate("");
+    const [selectedDestination, setSelectedDestination] = useState("");
 
     const handleDestinationChange = (event) => {
         const selectedValue = event.target.value;
