@@ -6,6 +6,8 @@ const TourCard = ({ id, name, info, price, image, onRemove}) => {
     const [readMore, setReadMore] = useState(false);
 
     return (
+        // Tour card component to display tour details
+        // Includes a "Not Interested" button to remove the tour from the list
         <article className = "tour-card">
             <h3>{ name }</h3>
             <h5>{ info } </h5>

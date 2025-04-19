@@ -48,14 +48,16 @@ const App = () => {
             <h1>Tours</h1>
             {tours.length === 0 ? (
                 <div className="no-tours">
+                    {/* No tours left, show a message and refresh button */}
+                    {/* Refresh button will only show up once all tours have been exhausted*/}
                     <p>No tours left. Refresh to reload.</p>
                     <button onClick={handleRefresh} className="refresh-btn">
-                        Refresh
+                        Refresh List
                     </button>
                 </div>
             ) : (
                 <DestinationSelector
-                    tours={tours}
+                tours={tours}
                     onSelectDestination={(destination) => {
                         setFilter(destination);
                     }}
